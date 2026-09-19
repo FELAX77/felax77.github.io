@@ -1001,14 +1001,11 @@ video {
 }
 
 .business-card-heading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
 }
 
 .business-card-heading h2 {
-  margin: 0;
+  margin: 9px 0 0;
   font-family: "Noto Serif SC", SimSun, serif;
   font-size: 34px;
   font-weight: 500;
@@ -1026,7 +1023,8 @@ video {
   aspect-ratio: 1.72;
   overflow: hidden;
   border-radius: 6px;
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.46), 0 0 28px rgba(82, 211, 218, 0.035);
+  backdrop-filter: blur(14px);
 }
 
 .name-card--front {
@@ -1035,8 +1033,8 @@ video {
   justify-content: space-between;
   padding: clamp(26px, 3vw, 44px);
   border: 1px solid rgba(196, 235, 232, 0.24);
-  color: #f2f4ef;
-  background: #173536;
+  color: #f2fbfb;
+  background: rgba(13, 53, 58, 0.76);
 }
 
 .name-card--front::after {
@@ -1045,7 +1043,7 @@ video {
   bottom: -42%;
   width: 70%;
   aspect-ratio: 1;
-  border: 1px solid rgba(134, 224, 221, 0.13);
+  border: 1px solid rgba(134, 224, 221, 0.16);
   border-radius: 50%;
   box-shadow:
     0 0 0 34px rgba(134, 224, 221, 0.035),
@@ -1113,14 +1111,14 @@ video {
   gap: clamp(20px, 2.5vw, 38px);
   align-items: center;
   padding: clamp(24px, 2.8vw, 40px);
-  border: 1px solid rgba(255, 255, 255, 0.56);
-  color: #102426;
-  background: #eef2ee;
+  border: 1px solid rgba(187, 234, 238, 0.24);
+  color: #eaf8fa;
+  background: rgba(3, 19, 28, 0.82);
 }
 
 .name-card-contact > p {
   margin: 0 0 10px;
-  color: #458184;
+  color: var(--aqua);
   font-size: 10px;
   letter-spacing: 0.12em;
 }
@@ -1133,7 +1131,7 @@ video {
 }
 
 .name-card-contact h3 span {
-  color: rgba(16, 36, 38, 0.48);
+  color: rgba(228, 246, 248, 0.42);
   font-family: Arial, sans-serif;
   font-size: 0.62em;
   font-weight: 500;
@@ -1149,18 +1147,19 @@ video {
   gap: 9px;
   align-items: center;
   padding: 5px 0;
-  border-top: 1px solid rgba(16, 36, 38, 0.13);
+  border-top: 1px solid rgba(190, 232, 236, 0.15);
 }
 
 .name-card-contact dt {
   display: grid;
   place-items: center;
-  color: #c95e78;
+  color: #ff86a4;
 }
 
 .name-card-contact dd {
   min-width: 0;
   margin: 0;
+  color: rgba(235, 248, 250, 0.78);
   font-size: 12px;
   overflow-wrap: anywhere;
 }
@@ -1172,14 +1171,17 @@ video {
 .wechat-qr img {
   width: 100%;
   max-height: 200px;
+  padding: 5px;
+  border-radius: 3px;
   object-fit: contain;
+  box-sizing: border-box;
   background: #fff;
 }
 
 .wechat-qr span {
   display: block;
   margin-top: 8px;
-  color: rgba(16, 36, 38, 0.54);
+  color: rgba(223, 244, 247, 0.5);
   font-size: 10px;
 }
 
