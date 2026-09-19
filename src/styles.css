@@ -9,6 +9,11 @@
   --line: rgba(221, 248, 255, 0.22);
   --panel: rgba(3, 18, 28, 0.74);
   --muted: rgba(229, 244, 248, 0.68);
+  --ocean-brightness: 1.08;
+  --ocean-saturation: 1;
+  --ocean-depth-overlay: 0.03;
+  --surface-depth-opacity: 1;
+  --particle-depth-opacity: 0.64;
 }
 
 * {
@@ -134,12 +139,25 @@ video {
   background: #031722;
 }
 
+.ocean-backdrop::after {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(1, 16, 25, 0.08), rgba(0, 3, 8, 0.88)),
+    radial-gradient(circle at 50% 0%, transparent 0 18%, rgba(0, 7, 15, 0.74) 88%);
+  content: "";
+  opacity: var(--ocean-depth-overlay);
+}
+
 .ocean-backdrop > img {
   position: relative;
   z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: brightness(var(--ocean-brightness)) saturate(var(--ocean-saturation));
   animation: ocean-drift 18s ease-in-out infinite alternate;
   transform: scale(1.035);
 }
@@ -157,15 +175,15 @@ video {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: rgba(0, 10, 18, 0.18);
+  background: rgba(0, 10, 18, 0.08);
 }
 
 .ocean-backdrop--mid .ocean-shade {
-  background: rgba(0, 12, 20, 0.32);
+  background: rgba(0, 12, 20, 0.26);
 }
 
 .ocean-backdrop--deep .ocean-shade {
-  background: rgba(0, 6, 12, 0.58);
+  background: rgba(0, 6, 12, 0.5);
 }
 
 .ocean-backdrop--abyss .ocean-shade {
@@ -179,6 +197,7 @@ video {
   overflow: hidden;
   pointer-events: none;
   opacity: 0.46;
+  filter: opacity(var(--surface-depth-opacity));
   mix-blend-mode: screen;
 }
 
@@ -222,7 +241,7 @@ video {
   position: absolute;
   inset: 0;
   z-index: 3;
-  opacity: 0.58;
+  opacity: var(--particle-depth-opacity);
 }
 
 .water-particles i {
@@ -368,7 +387,7 @@ video {
 
 .about-copy h2,
 .awards-primary h2,
-.contact-copy h2,
+.contact-heading h2,
 .poster-heading h2 {
   margin: 0;
   font-family: "Noto Serif SC", SimSun, serif;
@@ -875,24 +894,41 @@ video {
   display: flex;
   align-items: center;
   min-height: 100svh;
-  padding: 92px 0 100px;
+  padding: 92px 0 90px;
+  background: #01070b;
 }
 
 .contact-layout {
   display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 9vw;
+  grid-template-columns: minmax(210px, 0.56fr) minmax(0, 2fr);
+  gap: 30px 38px;
   align-items: center;
 }
 
-.contact-copy h2 {
-  font-size: 52px;
+.contact-heading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
 }
 
-.contact-copy > p {
-  margin: 20px 0 34px;
+.contact-heading h2 {
+  margin: 0;
+  font-size: clamp(32px, 3.4vw, 48px);
+}
+
+.contact-heading > p {
+  max-width: 320px;
+  margin: 0 0 5px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: right;
+}
+
+.contact-sidebar {
+  min-width: 0;
 }
 
 .contact-list {
@@ -948,10 +984,11 @@ video {
 
 .bilibili-block {
   display: grid;
-  grid-template-columns: 176px 1fr;
-  gap: 28px;
+  grid-template-columns: 74px 1fr;
+  gap: 14px;
   align-items: center;
-  padding: 28px;
+  margin-top: 20px;
+  padding: 14px;
   border: 1px solid rgba(221, 248, 255, 0.18);
   border-radius: 6px;
   background: rgba(2, 15, 23, 0.62);
@@ -959,7 +996,7 @@ video {
 }
 
 .bilibili-block > img {
-  width: 176px;
+  width: 74px;
   aspect-ratio: 1;
   border-radius: 4px;
   background: #fff;
@@ -977,38 +1014,15 @@ video {
 }
 
 .bilibili-block strong {
-  margin-top: 10px;
-  font-size: 22px;
+  margin-top: 5px;
+  font-size: 16px;
 }
 
 .bilibili-block span {
-  margin-top: 12px;
+  margin-top: 7px;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.6;
-}
-
-.business-card {
-  display: flex;
-  align-items: center;
-  min-height: 100svh;
-  padding: 96px 0 104px;
-  background: #01070b;
-}
-
-.business-card-layout {
-  z-index: 3;
-}
-
-.business-card-heading {
-  margin-bottom: 28px;
-}
-
-.business-card-heading h2 {
-  margin: 9px 0 0;
-  font-family: "Noto Serif SC", SimSun, serif;
-  font-size: 34px;
-  font-weight: 500;
 }
 
 .business-card-pair {
@@ -1107,10 +1121,10 @@ video {
 
 .name-card--back {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 142px;
-  gap: clamp(20px, 2.5vw, 38px);
+  grid-template-columns: minmax(0, 1fr) 126px;
+  gap: clamp(18px, 2vw, 28px);
   align-items: center;
-  padding: clamp(24px, 2.8vw, 40px);
+  padding: clamp(22px, 2.4vw, 34px);
   border: 1px solid rgba(187, 234, 238, 0.24);
   color: #eaf8fa;
   background: rgba(3, 19, 28, 0.82);
@@ -1124,13 +1138,17 @@ video {
 }
 
 .name-card-contact h3 {
-  margin: 0 0 clamp(22px, 3vw, 42px);
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  margin: 0 0 clamp(18px, 2vw, 28px);
   font-family: "Noto Serif SC", SimSun, serif;
-  font-size: clamp(22px, 2.3vw, 34px);
+  font-size: clamp(22px, 2vw, 30px);
   font-weight: 600;
 }
 
 .name-card-contact h3 span {
+  white-space: nowrap;
   color: rgba(228, 246, 248, 0.42);
   font-family: Arial, sans-serif;
   font-size: 0.62em;
@@ -1197,7 +1215,7 @@ video {
   font-size: 11px;
 }
 
-.business-card footer {
+.contact footer {
   position: absolute;
   bottom: 34px;
   left: 4.5vw;
@@ -1392,9 +1410,9 @@ video {
   .poster-layout { grid-template-columns: 170px minmax(0, 1fr); gap: 20px 34px; }
   .poster-showcase { grid-template-columns: minmax(0, 1fr) 130px; gap: 20px; }
   .awards-layout { gap: 42px; }
-  .contact-layout { gap: 5vw; }
-  .bilibili-block { grid-template-columns: 140px 1fr; padding: 22px; }
-  .bilibili-block > img { width: 140px; }
+  .contact-layout { grid-template-columns: 190px minmax(0, 1fr); gap: 26px; }
+  .bilibili-block { grid-template-columns: 66px 1fr; padding: 12px; }
+  .bilibili-block > img { width: 66px; }
   .business-card-pair { gap: 16px; }
   .name-card--back { grid-template-columns: minmax(0, 1fr) 112px; }
 }
@@ -1470,14 +1488,14 @@ video {
   .award-row strong { font-size: 12px; line-height: 1.5; }
   .other-awards { padding: 20px; }
   .contact { padding: 92px 0 110px; }
-  .contact-layout { grid-template-columns: 1fr; gap: 34px; }
-  .contact-copy h2 { font-size: 36px; }
-  .bilibili-block { grid-template-columns: 126px 1fr; gap: 18px; padding: 18px; }
-  .bilibili-block > img { width: 126px; }
+  .contact-layout { display: block; }
+  .contact-heading { display: block; margin-bottom: 28px; }
+  .contact-heading h2 { font-size: 34px; }
+  .contact-heading > p { margin-top: 12px; text-align: left; }
+  .contact-sidebar { margin-bottom: 24px; }
+  .bilibili-block { grid-template-columns: 82px 1fr; gap: 16px; padding: 14px; }
+  .bilibili-block > img { width: 82px; }
   .bilibili-block strong { font-size: 18px; }
-  .business-card { align-items: flex-start; padding: 92px 0 104px; }
-  .business-card-heading { margin-bottom: 22px; }
-  .business-card-heading h2 { font-size: 28px; }
   .business-card-pair { grid-template-columns: 1fr; gap: 16px; }
   .name-card { min-height: 224px; aspect-ratio: auto; }
   .name-card--front { padding: 24px; }

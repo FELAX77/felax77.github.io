@@ -201,6 +201,37 @@ function OceanBackdrop({ src, tone = "mid" }) {
   );
 }
 
+function OceanDepthController() {
+  useEffect(() => {
+    let frame;
+    const update = () => {
+      frame = undefined;
+      const scrollRange = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const depth = Math.max(0, Math.min(1, window.scrollY / scrollRange));
+      const root = document.documentElement;
+      root.style.setProperty("--ocean-brightness", (1.08 - depth * 0.54).toFixed(3));
+      root.style.setProperty("--ocean-saturation", (1 - depth * 0.34).toFixed(3));
+      root.style.setProperty("--ocean-depth-overlay", (0.03 + depth * 0.5).toFixed(3));
+      root.style.setProperty("--surface-depth-opacity", (1 - depth * 0.78).toFixed(3));
+      root.style.setProperty("--particle-depth-opacity", (0.64 - depth * 0.38).toFixed(3));
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return null;
+}
+
 function SpriteCrop({ src, col = 0, row = 0, alt = "" }) {
   return (
     <span className="sprite-crop" role="img" aria-label={alt}>
@@ -241,6 +272,7 @@ function JellyfishCursor() {
     let currentY = -120;
     let velocityX = 0;
     let velocityY = 0;
+    let heading = 0;
     let lastTrailX = -120;
     let lastTrailY = -120;
     let lastTime = performance.now();
@@ -357,10 +389,15 @@ function JellyfishCursor() {
 
       const speed = Math.hypot(velocityX, velocityY);
       const bob = Math.sin(time * 0.0032) * 4.5;
-      const tilt = Math.max(-14, Math.min(14, velocityX * 1.3));
+      if (speed > 0.32) {
+        const targetHeading = Math.atan2(velocityY, velocityX) * (180 / Math.PI) + 90;
+        const headingDelta = ((targetHeading - heading + 540) % 360) - 180;
+        heading += headingDelta * Math.min(1, 0.12 * frameScale);
+      }
+      const swimSway = Math.sin(time * 0.0042) * Math.min(3.5, speed * 0.22);
       const stretch = Math.min(0.07, speed * 0.006);
       if (jellyRef.current) {
-        jellyRef.current.style.transform = `translate3d(${currentX - 40}px, ${currentY - 30 + bob}px, 0) rotate(${tilt}deg) scale(${1 - stretch * 0.35}, ${1 + stretch})`;
+        jellyRef.current.style.transform = `translate3d(${currentX - 40}px, ${currentY - 30 + bob}px, 0) rotate(${heading + swimSway}deg) scale(${1 - stretch * 0.35}, ${1 + stretch})`;
       }
       if (glowRef.current) {
         glowRef.current.style.transform = `translate3d(${currentX - 150}px, ${currentY - 150}px, 0)`;
@@ -657,10 +694,14 @@ function Contact() {
     <section className="contact screen-section" id="contact">
       <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
       <div className="section-shell contact-layout">
-        <div className="contact-copy">
-          <div className="section-kicker">保持联系</div>
-          <h2>让下一次创作<br />从这里开始</h2>
+        <header className="contact-heading">
+          <div>
+            <div className="section-kicker">保持联系 / CONTACT</div>
+            <h2>让下一次创作从这里开始</h2>
+          </div>
           <p>求职、项目合作与创作交流均可联系。</p>
+        </header>
+        <aside className="contact-sidebar">
           <div className="contact-list">
             <CopyLine icon={Mail} label="邮箱" value={CONTACT_INFO.email} />
             <div className="contact-line is-static">
@@ -668,26 +709,12 @@ function Contact() {
               <span><small>所在地</small><strong>{CONTACT_INFO.location}</strong></span>
             </div>
           </div>
-        </div>
-        <div className="bilibili-block">
-          <img src="assets/bilibili-qr.png" alt="虾做作AIGC的哔哩哔哩主页二维码" />
-          <div><small>BILIBILI</small><strong>虾做作AIGC</strong><span>扫码查看持续更新的影像作品</span></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function BusinessCard() {
-  return (
-    <section className="business-card screen-section" id="card">
-      <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
-      <div className="section-shell business-card-layout">
-        <header className="business-card-heading">
-          <div className="section-kicker">CONTACT CARD</div>
-          <h2>个人名片</h2>
-        </header>
-        <div className="business-card-pair">
+          <div className="bilibili-block">
+            <img src="assets/bilibili-qr.png" alt="虾做作AIGC的哔哩哔哩主页二维码" />
+            <div><small>BILIBILI</small><strong>虾做作AIGC</strong><span>扫码查看持续更新的影像作品</span></div>
+          </div>
+        </aside>
+        <div className="business-card-pair" id="card">
           <article className="name-card name-card--front">
             <span className="name-card-mark">FELAX</span>
             <div className="name-card-identity">
@@ -771,6 +798,7 @@ function App() {
   const closeModal = useMemo(() => () => setModal(null), []);
   return (
     <>
+      <OceanDepthController />
       <Navigation />
       <JellyfishCursor />
       <main>
@@ -797,7 +825,6 @@ function App() {
         <Posters onOpen={setModal} />
         <Awards onOpen={setModal} />
         <Contact />
-        <BusinessCard />
       </main>
       <Modal content={modal} onClose={closeModal} />
     </>
