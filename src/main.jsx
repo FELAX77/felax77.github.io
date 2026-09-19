@@ -10,6 +10,7 @@ import {
   Copy,
   Mail,
   MapPin,
+  Phone,
   Play,
   X,
 } from "lucide-react";
@@ -165,6 +166,13 @@ const SKILLS = [
     tools: "Codex · Vibe Coding",
   },
 ];
+
+const CONTACT_INFO = {
+  phone: "18105832060",
+  phoneDisplay: "181 0583 2060",
+  email: "3095086690@qq.com",
+  location: "浙江 · 嘉兴",
+};
 
 function OceanBackdrop({ src, tone = "mid" }) {
   return (
@@ -497,7 +505,9 @@ function FlowGallery({ id, projects, background, kicker, title, description, onO
           <p>{description}</p>
         </header>
         <div className="flow-copy" aria-live="polite">
+          <p className="flow-eyebrow">{active.eyebrow}</p>
           <h2>{active.title}</h2>
+          <p className="flow-description">{active.description}</p>
           <dl>
             <div><dt>分工</dt><dd>{active.role}</dd></div>
             <div><dt>成果</dt><dd>{active.result}</dd></div>
@@ -652,16 +662,57 @@ function Contact() {
           <h2>让下一次创作<br />从这里开始</h2>
           <p>求职、项目合作与创作交流均可联系。</p>
           <div className="contact-list">
-            <CopyLine icon={Mail} label="邮箱" value="3095086690@qq.com" />
+            <CopyLine icon={Mail} label="邮箱" value={CONTACT_INFO.email} />
             <div className="contact-line is-static">
               <MapPin size={20} strokeWidth={1.5} aria-hidden="true" />
-              <span><small>所在地</small><strong>浙江 · 嘉兴</strong></span>
+              <span><small>所在地</small><strong>{CONTACT_INFO.location}</strong></span>
             </div>
           </div>
         </div>
         <div className="bilibili-block">
           <img src="assets/bilibili-qr.png" alt="虾做作AIGC的哔哩哔哩主页二维码" />
           <div><small>BILIBILI</small><strong>虾做作AIGC</strong><span>扫码查看持续更新的影像作品</span></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BusinessCard() {
+  return (
+    <section className="business-card screen-section" id="card">
+      <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
+      <div className="section-shell business-card-layout">
+        <header className="business-card-heading">
+          <div className="section-kicker">CONTACT CARD</div>
+          <h2>个人名片</h2>
+        </header>
+        <div className="business-card-pair">
+          <article className="name-card name-card--front">
+            <span className="name-card-mark">FELAX</span>
+            <div className="name-card-identity">
+              <p>冯宇凡</p>
+              <h3>FELAX</h3>
+              <strong>AIGC 影像创作</strong>
+              <small>导演 · 拍摄 · 后期 · 视觉设计</small>
+            </div>
+            <span className="name-card-year">PORTFOLIO / 2026</span>
+          </article>
+          <article className="name-card name-card--back">
+            <div className="name-card-contact">
+              <p>AIGC VIDEO CREATION</p>
+              <h3>冯宇凡 <span>/ FELAX</span></h3>
+              <dl>
+                <div><dt><Phone size={15} aria-hidden="true" /></dt><dd><a href={`tel:${CONTACT_INFO.phone}`}>{CONTACT_INFO.phoneDisplay}</a></dd></div>
+                <div><dt><Mail size={15} aria-hidden="true" /></dt><dd><a href={`mailto:${CONTACT_INFO.email}`}>{CONTACT_INFO.email}</a></dd></div>
+                <div><dt><MapPin size={15} aria-hidden="true" /></dt><dd>{CONTACT_INFO.location}</dd></div>
+              </dl>
+            </div>
+            <div className="wechat-qr">
+              <img src="assets/wechat-qr.jpg" alt="冯宇凡的微信二维码" />
+              <span>微信联系</span>
+            </div>
+          </article>
         </div>
       </div>
       <a className="back-top" href="#top" aria-label="返回顶部">
@@ -746,6 +797,7 @@ function App() {
         <Posters onOpen={setModal} />
         <Awards onOpen={setModal} />
         <Contact />
+        <BusinessCard />
       </main>
       <Modal content={modal} onClose={closeModal} />
     </>

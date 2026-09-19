@@ -466,27 +466,35 @@ video {
 
 .flow-copy {
   position: absolute;
-  top: 36%;
+  top: 31%;
   left: 7vw;
   z-index: 5;
-  width: min(390px, 32vw);
-  min-height: 280px;
+  width: min(450px, 36vw);
+  min-height: 330px;
   padding-left: 22px;
   border-left: 1px solid rgba(155, 232, 232, 0.45);
 }
 
-.flow-copy > p {
+.flow-copy > .flow-eyebrow {
   margin: 0 0 13px;
   color: var(--aqua);
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .flow-copy h2 {
-  margin: 0 0 34px;
+  margin: 0 0 16px;
   font-family: "Noto Serif SC", SimSun, serif;
   font-size: 48px;
   font-weight: 500;
   line-height: 1.18;
+}
+
+.flow-copy > .flow-description {
+  margin: 0 0 24px;
+  color: rgba(232, 247, 249, 0.66);
+  font-size: 12px;
+  line-height: 1.8;
+  text-wrap: balance;
 }
 
 .flow-copy dl,
@@ -980,6 +988,201 @@ video {
   line-height: 1.6;
 }
 
+.business-card {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding: 96px 0 104px;
+  background: #01070b;
+}
+
+.business-card-layout {
+  z-index: 3;
+}
+
+.business-card-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.business-card-heading h2 {
+  margin: 0;
+  font-family: "Noto Serif SC", SimSun, serif;
+  font-size: 34px;
+  font-weight: 500;
+}
+
+.business-card-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.name-card {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 1.72;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+}
+
+.name-card--front {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(26px, 3vw, 44px);
+  border: 1px solid rgba(196, 235, 232, 0.24);
+  color: #f2f4ef;
+  background: #173536;
+}
+
+.name-card--front::after {
+  position: absolute;
+  right: -12%;
+  bottom: -42%;
+  width: 70%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(134, 224, 221, 0.13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 34px rgba(134, 224, 221, 0.035),
+    0 0 0 68px rgba(134, 224, 221, 0.025),
+    0 0 0 102px rgba(134, 224, 221, 0.018);
+  content: "";
+}
+
+.name-card-mark {
+  position: relative;
+  z-index: 1;
+  align-self: flex-end;
+  color: rgba(232, 248, 244, 0.58);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+
+.name-card-identity {
+  position: relative;
+  z-index: 1;
+}
+
+.name-card-identity p {
+  margin: 0 0 7px;
+  color: rgba(232, 248, 244, 0.66);
+  font-family: "Noto Serif SC", SimSun, serif;
+  font-size: 18px;
+}
+
+.name-card-identity h3 {
+  margin: 0 0 20px;
+  font-size: clamp(40px, 5vw, 70px);
+  font-weight: 600;
+  line-height: 0.95;
+}
+
+.name-card-identity strong,
+.name-card-identity small {
+  display: block;
+}
+
+.name-card-identity strong {
+  color: #ff8aa7;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.name-card-identity small {
+  margin-top: 8px;
+  color: rgba(238, 248, 244, 0.58);
+  font-size: 11px;
+}
+
+.name-card-year {
+  position: relative;
+  z-index: 1;
+  color: rgba(232, 248, 244, 0.4);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+
+.name-card--back {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 142px;
+  gap: clamp(20px, 2.5vw, 38px);
+  align-items: center;
+  padding: clamp(24px, 2.8vw, 40px);
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  color: #102426;
+  background: #eef2ee;
+}
+
+.name-card-contact > p {
+  margin: 0 0 10px;
+  color: #458184;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.name-card-contact h3 {
+  margin: 0 0 clamp(22px, 3vw, 42px);
+  font-family: "Noto Serif SC", SimSun, serif;
+  font-size: clamp(22px, 2.3vw, 34px);
+  font-weight: 600;
+}
+
+.name-card-contact h3 span {
+  color: rgba(16, 36, 38, 0.48);
+  font-family: Arial, sans-serif;
+  font-size: 0.62em;
+  font-weight: 500;
+}
+
+.name-card-contact dl {
+  margin: 0;
+}
+
+.name-card-contact dl > div {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  padding: 5px 0;
+  border-top: 1px solid rgba(16, 36, 38, 0.13);
+}
+
+.name-card-contact dt {
+  display: grid;
+  place-items: center;
+  color: #c95e78;
+}
+
+.name-card-contact dd {
+  min-width: 0;
+  margin: 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.wechat-qr {
+  text-align: center;
+}
+
+.wechat-qr img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.wechat-qr span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(16, 36, 38, 0.54);
+  font-size: 10px;
+}
+
 .back-top {
   position: absolute;
   right: 4.5vw;
@@ -992,7 +1195,7 @@ video {
   font-size: 11px;
 }
 
-.contact footer {
+.business-card footer {
   position: absolute;
   bottom: 34px;
   left: 4.5vw;
@@ -1190,6 +1393,8 @@ video {
   .contact-layout { gap: 5vw; }
   .bilibili-block { grid-template-columns: 140px 1fr; padding: 22px; }
   .bilibili-block > img { width: 140px; }
+  .business-card-pair { gap: 16px; }
+  .name-card--back { grid-template-columns: minmax(0, 1fr) 112px; }
 }
 
 @media (max-width: 760px) {
@@ -1268,6 +1473,17 @@ video {
   .bilibili-block { grid-template-columns: 126px 1fr; gap: 18px; padding: 18px; }
   .bilibili-block > img { width: 126px; }
   .bilibili-block strong { font-size: 18px; }
+  .business-card { align-items: flex-start; padding: 92px 0 104px; }
+  .business-card-heading { margin-bottom: 22px; }
+  .business-card-heading h2 { font-size: 28px; }
+  .business-card-pair { grid-template-columns: 1fr; gap: 16px; }
+  .name-card { min-height: 224px; aspect-ratio: auto; }
+  .name-card--front { padding: 24px; }
+  .name-card-identity h3 { margin-bottom: 15px; font-size: 46px; }
+  .name-card--back { grid-template-columns: minmax(0, 1fr) 104px; gap: 16px; padding: 22px; }
+  .name-card-contact h3 { margin-bottom: 18px; font-size: 22px; }
+  .name-card-contact dd { font-size: 11px; }
+  .wechat-qr img { max-height: 148px; }
   .modal-layer { padding: 10px; }
   .modal-panel.is-project { display: block; width: 100%; max-height: 94svh; }
   .modal-copy { padding: 28px 20px 24px; }
