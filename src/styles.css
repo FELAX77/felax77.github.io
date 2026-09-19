@@ -135,6 +135,8 @@ video {
 }
 
 .ocean-backdrop > img {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -154,6 +156,7 @@ video {
 .ocean-shade {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: rgba(0, 10, 18, 0.18);
 }
 
@@ -162,16 +165,63 @@ video {
 }
 
 .ocean-backdrop--deep .ocean-shade {
-  background: rgba(0, 7, 13, 0.48);
+  background: rgba(0, 6, 12, 0.58);
 }
 
 .ocean-backdrop--abyss .ocean-shade {
-  background: rgba(0, 5, 10, 0.62);
+  background: rgba(0, 4, 9, 0.72);
 }
+
+.surface-light {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.46;
+  mix-blend-mode: screen;
+}
+
+.surface-light::before {
+  position: absolute;
+  top: -5%;
+  left: -8%;
+  width: 116%;
+  height: 34%;
+  background:
+    radial-gradient(ellipse at center, transparent 45%, rgba(190, 247, 251, 0.28) 49%, transparent 53%) 0 0 / 170px 38px repeat,
+    radial-gradient(ellipse at center, transparent 45%, rgba(115, 225, 236, 0.2) 50%, transparent 54%) 70px 14px / 132px 31px repeat;
+  content: "";
+  filter: blur(2px);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+  animation: surface-wave 8s linear infinite;
+}
+
+.surface-light i {
+  position: absolute;
+  top: -18%;
+  width: 23%;
+  height: 125%;
+  background: linear-gradient(to bottom, rgba(170, 241, 247, 0.23), rgba(90, 203, 222, 0.08) 42%, transparent 82%);
+  clip-path: polygon(47% 0, 55% 0, 100% 100%, 0 100%);
+  filter: blur(14px);
+  transform-origin: 50% 0;
+  animation: light-sway 10s ease-in-out infinite alternate;
+}
+
+.surface-light i:nth-child(1) { left: 8%; animation-duration: 11s; }
+.surface-light i:nth-child(2) { left: 39%; width: 31%; opacity: 0.72; animation-delay: -4s; animation-duration: 14s; }
+.surface-light i:nth-child(3) { left: 72%; width: 19%; opacity: 0.6; animation-delay: -7s; animation-duration: 12s; }
+
+.ocean-backdrop--shallow .surface-light { opacity: 0.66; }
+.ocean-backdrop--mid .surface-light { opacity: 0.38; }
+.ocean-backdrop--deep .surface-light { opacity: 0.22; }
+.ocean-backdrop--abyss .surface-light { opacity: 0.1; }
 
 .water-particles {
   position: absolute;
   inset: 0;
+  z-index: 3;
   opacity: 0.58;
 }
 
@@ -196,6 +246,17 @@ video {
   0% { transform: translateY(34px); opacity: 0; }
   25% { opacity: 0.65; }
   100% { transform: translateY(-80px); opacity: 0; }
+}
+
+@keyframes surface-wave {
+  0% { transform: translate3d(-3%, -2%, 0) scaleX(1); }
+  50% { transform: translate3d(2%, 1%, 0) scaleX(1.07); }
+  100% { transform: translate3d(5%, -2%, 0) scaleX(0.98); }
+}
+
+@keyframes light-sway {
+  from { transform: rotate(-4deg) translateX(-3%); opacity: 0.52; }
+  to { transform: rotate(5deg) translateX(4%); opacity: 0.94; }
 }
 
 .hero {
@@ -373,6 +434,36 @@ video {
   isolation: isolate;
 }
 
+.flow-heading {
+  position: absolute;
+  top: 92px;
+  left: 7vw;
+  z-index: 5;
+  width: min(410px, 34vw);
+}
+
+.flow-heading > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--aqua);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.flow-heading h2 {
+  margin: 0;
+  font-family: "Noto Serif SC", SimSun, serif;
+  font-size: clamp(28px, 2.5vw, 40px);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.flow-heading p {
+  margin: 10px 0 0;
+  color: rgba(232, 247, 249, 0.58);
+  font-size: 12px;
+}
+
 .flow-copy {
   position: absolute;
   top: 36%;
@@ -528,15 +619,27 @@ video {
 }
 
 .poster-section {
-  min-height: 108svh;
+  min-height: 100svh;
+  background: #02080e;
+}
+
+.poster-layout {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.56fr) minmax(0, 2.44fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 22px clamp(34px, 5vw, 76px);
+  width: min(1320px, 91vw);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 96px 0 42px;
+  box-sizing: border-box;
 }
 
 .poster-heading {
-  position: absolute;
-  top: 40%;
-  left: 7vw;
-  z-index: 3;
-  width: 310px;
+  align-self: center;
+  width: min(310px, 100%);
 }
 
 .poster-heading > span {
@@ -546,54 +649,128 @@ video {
   font-size: 12px;
 }
 
-.poster-current {
-  position: absolute;
-  inset: 70px 4vw 3vh 38vw;
-  z-index: 2;
+.poster-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 156px;
+  gap: 26px;
+  min-width: 0;
+  align-items: end;
 }
 
-.poster-sheet {
-  position: absolute;
-  width: 25%;
-  aspect-ratio: 16 / 10;
+.poster-main {
+  --poster-pad: clamp(10px, 1.4vw, 20px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: min(68svh, 700px);
   padding: 0;
   overflow: hidden;
-  border: 1px solid rgba(227, 248, 250, 0.25);
-  border-radius: 3px;
-  background: #09141a;
-  box-shadow: 0 22px 50px rgba(0, 3, 7, 0.42);
-  transform: rotate(var(--poster-rotate, 0deg));
-  animation: poster-float 6s ease-in-out infinite alternate;
+  border: 1px solid rgba(190, 235, 240, 0.22);
+  border-radius: 5px;
+  background: rgba(1, 8, 13, 0.68);
+  box-shadow: 0 34px 90px rgba(0, 2, 6, 0.58);
+  cursor: pointer;
 }
 
-.poster-sheet img {
+.poster-main img {
+  position: absolute;
+  inset: var(--poster-pad);
+  width: calc(100% - var(--poster-pad) * 2);
+  height: calc(100% - var(--poster-pad) * 2);
+  object-fit: contain;
+  transition: filter 240ms ease, transform 320ms ease;
+}
+
+.poster-main:hover img,
+.poster-main:focus-visible img {
+  filter: brightness(1.06);
+  transform: scale(1.012);
+}
+
+.poster-main:focus-visible,
+.poster-thumbs button:focus-visible,
+.poster-controls button:focus-visible {
+  outline: 2px solid var(--aqua);
+  outline-offset: 3px;
+}
+
+.poster-meta {
+  padding: 18px 0 4px;
+  border-top: 1px solid rgba(172, 225, 231, 0.28);
+}
+
+.poster-meta > span {
+  color: rgba(167, 228, 233, 0.62);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.poster-meta h3 {
+  min-height: 48px;
+  margin: 12px 0 28px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.poster-controls {
+  display: flex;
+  gap: 9px;
+}
+
+.poster-controls button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(202, 240, 244, 0.25);
+  border-radius: 50%;
+  color: rgba(240, 251, 253, 0.78);
+  background: rgba(5, 18, 25, 0.72);
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.poster-controls button:hover {
+  border-color: var(--aqua);
+  color: #021015;
+  background: var(--aqua);
+}
+
+.poster-thumbs {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.poster-thumbs button {
+  height: clamp(56px, 6.2vw, 86px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(202, 240, 244, 0.14);
+  border-radius: 3px;
+  background: #06121a;
+  cursor: pointer;
+  opacity: 0.48;
+  transition: opacity 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.poster-thumbs button:hover,
+.poster-thumbs button.is-active {
+  border-color: rgba(155, 232, 232, 0.72);
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.poster-thumbs img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 300ms ease;
 }
 
-.poster-sheet:hover img,
-.poster-sheet:focus-visible img {
-  transform: scale(1.035);
-}
-
-.poster-sheet.is-tall {
-  width: 15%;
-  aspect-ratio: 0.7;
-}
-
-.poster-sheet--1 { top: 4%; left: 14%; --poster-rotate: -3deg; }
-.poster-sheet--2 { top: 8%; left: 42%; --poster-rotate: 2deg; animation-delay: -2s; }
-.poster-sheet--3 { top: 37%; left: 2%; --poster-rotate: 2deg; animation-delay: -3s; }
-.poster-sheet--4 { top: 43%; left: 27%; --poster-rotate: -2deg; animation-delay: -1s; }
-.poster-sheet--5 { top: 69%; left: 10%; --poster-rotate: 2deg; animation-delay: -4s; }
-.poster-sheet--6 { top: 59%; left: 65%; --poster-rotate: -2deg; animation-delay: -2.6s; }
-
-@keyframes poster-float {
-  from { translate: 0 -4px; }
-  to { translate: 0 8px; }
-}
 
 .awards {
   display: flex;
@@ -825,7 +1002,8 @@ video {
 }
 
 .cursor-dot,
-.cursor-jelly {
+.cursor-jelly,
+.cursor-waterlight {
   position: fixed;
   top: 0;
   left: 0;
@@ -837,8 +1015,36 @@ video {
 }
 
 .cursor-dot.is-visible,
-.cursor-jelly.is-visible {
+.cursor-jelly.is-visible,
+.cursor-water-fx.is-visible {
   opacity: 1;
+}
+
+.cursor-water-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 290;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 220ms ease;
+}
+
+.cursor-waterlight {
+  --reaction-strength: 0.35;
+  z-index: 70;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 46% 42%, rgba(255, 108, 151, 0.2), transparent 18%),
+    radial-gradient(circle at 50% 50%, rgba(80, 224, 235, 0.18), rgba(35, 148, 181, 0.08) 35%, transparent 68%);
+  filter: blur(5px);
+  mix-blend-mode: screen;
+}
+
+.cursor-waterlight.is-visible {
+  opacity: calc(0.13 + var(--reaction-strength) * 0.18);
 }
 
 .cursor-dot {
@@ -861,6 +1067,13 @@ video {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform-origin: 50% 24%;
+  animation: jelly-pulse 1.65s ease-in-out infinite;
+}
+
+@keyframes jelly-pulse {
+  0%, 100% { transform: scaleX(0.96) scaleY(1.035); }
+  48% { transform: scaleX(1.045) scaleY(0.96); }
 }
 
 .modal-layer {
@@ -968,8 +1181,11 @@ video {
   .about-copy h2, .awards-primary h2, .poster-heading h2 { font-size: 32px; }
   .skill-row { grid-template-columns: 112px 1fr; }
   .flow-copy { left: 5vw; width: 34vw; }
+  .flow-heading { left: 5vw; }
   .flow-copy h2 { font-size: 40px; }
   .flow-card { width: 49vw; }
+  .poster-layout { grid-template-columns: 170px minmax(0, 1fr); gap: 20px 34px; }
+  .poster-showcase { grid-template-columns: minmax(0, 1fr) 130px; gap: 20px; }
   .awards-layout { gap: 42px; }
   .contact-layout { gap: 5vw; }
   .bilibili-block { grid-template-columns: 140px 1fr; padding: 22px; }
@@ -979,7 +1195,7 @@ video {
 @media (max-width: 760px) {
   .has-jelly-cursor,
   .has-jelly-cursor * { cursor: auto !important; }
-  .cursor-dot, .cursor-jelly { display: none; }
+  .cursor-dot, .cursor-jelly, .cursor-water-fx, .cursor-waterlight { display: none; }
   .site-nav { height: 60px; padding: 0 18px; }
   .site-nav nav { gap: 17px; }
   .site-nav nav a { font-size: 11px; }
@@ -998,6 +1214,9 @@ video {
   .skill-row p { font-size: 12px; }
   .flow-section { height: auto; min-height: 100svh; }
   .flow-sticky { position: relative; height: auto; min-height: 100svh; padding: 92px 16px 54px; }
+  .flow-heading { position: relative; top: auto; left: auto; width: auto; margin-bottom: 28px; }
+  .flow-heading h2 { font-size: 28px; }
+  .flow-heading p { line-height: 1.6; }
   .flow-copy, .flow-line { display: none; }
   .flow-cards { position: relative; display: grid; gap: 18px; }
   .flow-card {
@@ -1025,11 +1244,18 @@ video {
   .mobile-card-copy strong { font-size: 14px; }
   .mobile-card-copy small { color: var(--muted); font-size: 10px; }
   .play-mark { right: 12px; bottom: 64px; width: 36px; height: 36px; }
-  .poster-section { min-height: 0; padding: 92px 16px 56px; }
-  .poster-heading { position: relative; top: auto; left: auto; width: auto; margin-bottom: 26px; }
-  .poster-current { position: relative; inset: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-  .poster-sheet, .poster-sheet.is-tall { position: relative; inset: auto; width: 100%; animation: none; transform: none; }
-  .poster-sheet.is-tall { aspect-ratio: 0.72; grid-row: span 2; }
+  .poster-section { min-height: 0; }
+  .poster-layout { display: block; width: auto; min-height: 0; padding: 92px 16px 56px; }
+  .poster-heading { width: auto; margin-bottom: 26px; }
+  .poster-showcase { display: block; }
+  .poster-main { --poster-pad: 10px; height: min(61svh, 520px); }
+  .poster-meta { display: grid; grid-template-columns: 1fr auto; align-items: center; margin-top: 18px; padding-top: 14px; }
+  .poster-meta > span { grid-column: 1; }
+  .poster-meta h3 { grid-column: 1; min-height: 0; margin: 7px 18px 0 0; font-size: 13px; }
+  .poster-controls { grid-column: 2; grid-row: 1 / span 2; }
+  .poster-controls button { width: 38px; height: 38px; }
+  .poster-thumbs { display: flex; gap: 9px; margin-top: 20px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: thin; }
+  .poster-thumbs button { flex: 0 0 92px; height: 62px; }
   .awards { padding: 92px 0 55px; }
   .awards-layout { grid-template-columns: 1fr; gap: 30px; }
   .awards-primary h2 { margin-bottom: 24px; }

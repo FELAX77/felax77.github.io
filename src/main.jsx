@@ -4,6 +4,8 @@ import {
   ArrowDown,
   Award,
   Check,
+  ChevronLeft,
+  ChevronRight,
   ChevronUp,
   Copy,
   Mail,
@@ -169,6 +171,11 @@ function OceanBackdrop({ src, tone = "mid" }) {
     <div className={`ocean-backdrop ocean-backdrop--${tone}`} aria-hidden="true">
       <img src={src} alt="" />
       <div className="ocean-shade" />
+      <div className="surface-light">
+        <i />
+        <i />
+        <i />
+      </div>
       <div className="water-particles">
         {Array.from({ length: 14 }, (_, index) => (
           <i
@@ -208,52 +215,163 @@ function Cover({ cover, title }) {
 function JellyfishCursor() {
   const jellyRef = useRef(null);
   const dotRef = useRef(null);
+  const canvasRef = useRef(null);
+  const glowRef = useRef(null);
 
   useEffect(() => {
     const precisePointer = window.matchMedia("(pointer: fine)");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!precisePointer.matches || reducedMotion.matches) return undefined;
 
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return undefined;
+
     let targetX = -120;
     let targetY = -120;
     let currentX = -120;
     let currentY = -120;
-    let lastX = targetX;
+    let velocityX = 0;
+    let velocityY = 0;
+    let lastTrailX = -120;
+    let lastTrailY = -120;
+    let lastTime = performance.now();
+    let dpr = 1;
+    const particles = [];
     let frame;
 
     document.documentElement.classList.add("has-jelly-cursor");
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const emitTrail = (x, y, strength = 1) => {
+      particles.push({ type: "ripple", x, y, age: 0, life: 0.9, size: 8 + strength * 2 });
+      particles.push({ type: "bloom", x, y, age: 0, life: 0.55, size: 26 + strength * 8 });
+      const bubbleCount = strength > 1.5 ? 3 : 2;
+      for (let index = 0; index < bubbleCount; index += 1) {
+        particles.push({
+          type: "bubble",
+          x: x + (Math.random() - 0.5) * 26,
+          y: y + (Math.random() - 0.5) * 18,
+          vx: (Math.random() - 0.5) * 15,
+          vy: -18 - Math.random() * 24,
+          age: 0,
+          life: 0.9 + Math.random() * 0.7,
+          size: 1.5 + Math.random() * 3.2,
+        });
+      }
+      if (particles.length > 120) particles.splice(0, particles.length - 120);
+    };
 
     const move = (event) => {
       targetX = event.clientX;
       targetY = event.clientY;
       dotRef.current?.classList.add("is-visible");
       jellyRef.current?.classList.add("is-visible");
+      canvas.classList.add("is-visible");
+      glowRef.current?.classList.add("is-visible");
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+      }
+
+      const travelled = Math.hypot(targetX - lastTrailX, targetY - lastTrailY);
+      if (travelled > 44) {
+        emitTrail(targetX, targetY, Math.min(2.4, travelled / 45));
+        lastTrailX = targetX;
+        lastTrailY = targetY;
       }
     };
     const hide = () => {
       dotRef.current?.classList.remove("is-visible");
       jellyRef.current?.classList.remove("is-visible");
+      canvas.classList.remove("is-visible");
+      glowRef.current?.classList.remove("is-visible");
     };
-    const animate = () => {
-      currentX += (targetX - currentX) * 0.095;
-      currentY += (targetY - currentY) * 0.095;
-      const velocity = Math.max(-10, Math.min(10, (currentX - lastX) * 0.8));
-      lastX = currentX;
-      if (jellyRef.current) {
-        jellyRef.current.style.transform = `translate3d(${currentX - 38}px, ${currentY - 27}px, 0) rotate(${velocity}deg)`;
+
+    const drawParticles = (delta) => {
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      context.save();
+      context.globalCompositeOperation = "screen";
+
+      for (let index = particles.length - 1; index >= 0; index -= 1) {
+        const particle = particles[index];
+        particle.age += delta;
+        const progress = particle.age / particle.life;
+        if (progress >= 1) {
+          particles.splice(index, 1);
+          continue;
+        }
+
+        if (particle.type === "ripple") {
+          const radius = particle.size + progress * 54;
+          context.beginPath();
+          context.arc(particle.x, particle.y, radius, 0, Math.PI * 2);
+          context.strokeStyle = `rgba(137, 232, 245, ${(1 - progress) * 0.34})`;
+          context.lineWidth = 1.15;
+          context.stroke();
+        } else if (particle.type === "bloom") {
+          const radius = particle.size * (0.75 + progress * 1.5);
+          const gradient = context.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, radius);
+          gradient.addColorStop(0, `rgba(255, 116, 157, ${(1 - progress) * 0.13})`);
+          gradient.addColorStop(0.42, `rgba(92, 222, 235, ${(1 - progress) * 0.09})`);
+          gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+          context.fillStyle = gradient;
+          context.fillRect(particle.x - radius, particle.y - radius, radius * 2, radius * 2);
+        } else {
+          particle.x += particle.vx * delta;
+          particle.y += particle.vy * delta;
+          context.beginPath();
+          context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          context.strokeStyle = `rgba(211, 249, 255, ${(1 - progress) * 0.62})`;
+          context.lineWidth = 0.9;
+          context.stroke();
+        }
       }
+      context.restore();
+    };
+
+    const animate = (time) => {
+      const delta = Math.min(0.034, (time - lastTime) / 1000);
+      const frameScale = delta * 60;
+      lastTime = time;
+
+      velocityX = (velocityX + (targetX - currentX) * 0.042 * frameScale) * Math.pow(0.79, frameScale);
+      velocityY = (velocityY + (targetY - currentY) * 0.042 * frameScale) * Math.pow(0.79, frameScale);
+      currentX += velocityX * frameScale;
+      currentY += velocityY * frameScale;
+
+      const speed = Math.hypot(velocityX, velocityY);
+      const bob = Math.sin(time * 0.0032) * 4.5;
+      const tilt = Math.max(-14, Math.min(14, velocityX * 1.3));
+      const stretch = Math.min(0.07, speed * 0.006);
+      if (jellyRef.current) {
+        jellyRef.current.style.transform = `translate3d(${currentX - 40}px, ${currentY - 30 + bob}px, 0) rotate(${tilt}deg) scale(${1 - stretch * 0.35}, ${1 + stretch})`;
+      }
+      if (glowRef.current) {
+        glowRef.current.style.transform = `translate3d(${currentX - 150}px, ${currentY - 150}px, 0)`;
+        glowRef.current.style.setProperty("--reaction-strength", `${Math.min(1, 0.35 + speed * 0.045)}`);
+      }
+      drawParticles(delta);
       frame = requestAnimationFrame(animate);
     };
 
+    resize();
     window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("resize", resize);
     document.documentElement.addEventListener("mouseleave", hide);
     frame = requestAnimationFrame(animate);
 
     return () => {
       document.documentElement.classList.remove("has-jelly-cursor");
       window.removeEventListener("pointermove", move);
+      window.removeEventListener("resize", resize);
       document.documentElement.removeEventListener("mouseleave", hide);
       cancelAnimationFrame(frame);
     };
@@ -261,6 +379,8 @@ function JellyfishCursor() {
 
   return (
     <>
+      <canvas ref={canvasRef} className="cursor-water-fx" aria-hidden="true" />
+      <span ref={glowRef} className="cursor-waterlight" aria-hidden="true" />
       <span ref={dotRef} className="cursor-dot" aria-hidden="true" />
       <span ref={jellyRef} className="cursor-jelly" aria-hidden="true">
         <img src="assets/jellyfish.png" alt="" />
@@ -361,7 +481,7 @@ function useFlow(sectionRef, count) {
   return value;
 }
 
-function FlowGallery({ id, projects, background, onOpen }) {
+function FlowGallery({ id, projects, background, kicker, title, description, onOpen }) {
   const sectionRef = useRef(null);
   const flow = useFlow(sectionRef, projects.length);
   const activeIndex = Math.max(0, Math.min(projects.length - 1, Math.round(flow)));
@@ -371,6 +491,11 @@ function FlowGallery({ id, projects, background, onOpen }) {
     <section className="flow-section" id={id} ref={sectionRef} style={{ "--flow-count": projects.length }}>
       <div className="flow-sticky">
         <OceanBackdrop src={background} tone="deep" />
+        <header className="flow-heading">
+          <span>{kicker}</span>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </header>
         <div className="flow-copy" aria-live="polite">
           <h2>{active.title}</h2>
           <dl>
@@ -417,26 +542,53 @@ function FlowGallery({ id, projects, background, onOpen }) {
 }
 
 function Posters({ onOpen }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activePoster = POSTERS[activeIndex];
+  const changePoster = (step) => {
+    setActiveIndex((current) => (current + step + POSTERS.length) % POSTERS.length);
+  };
+
   return (
     <section className="poster-section screen-section" id="posters">
       <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
-      <div className="poster-heading">
-        <p>平面视觉</p>
-        <h2>海报作品</h2>
-        <span>均由 Photoshop 完成</span>
-      </div>
-      <div className="poster-current">
-        {POSTERS.map((poster, index) => (
+      <div className="poster-layout">
+        <header className="poster-heading">
+          <p>平面视觉</p>
+          <h2>海报作品</h2>
+          <span>均由 Photoshop 完成</span>
+        </header>
+        <div className="poster-showcase">
           <button
-            className={`poster-sheet poster-sheet--${index + 1} ${poster.tall ? "is-tall" : ""}`}
+            className={`poster-main ${activePoster.tall ? "is-tall" : ""}`}
             type="button"
-            key={poster.src}
-            onClick={() => onOpen({ title: poster.title, image: poster.src })}
-            aria-label={`放大${poster.title}`}
+            onClick={() => onOpen({ title: activePoster.title, image: activePoster.src })}
+            aria-label={`放大${activePoster.title}`}
           >
-            <img src={poster.src} alt={poster.title} />
+            <img src={activePoster.src} alt={activePoster.title} />
           </button>
-        ))}
+          <div className="poster-meta" aria-live="polite">
+            <span>{String(activeIndex + 1).padStart(2, "0")} / {String(POSTERS.length).padStart(2, "0")}</span>
+            <h3>{activePoster.title}</h3>
+            <div className="poster-controls">
+              <button type="button" onClick={() => changePoster(-1)} aria-label="上一张海报"><ChevronLeft size={20} /></button>
+              <button type="button" onClick={() => changePoster(1)} aria-label="下一张海报"><ChevronRight size={20} /></button>
+            </div>
+          </div>
+        </div>
+        <div className="poster-thumbs" aria-label="选择海报">
+          {POSTERS.map((poster, index) => (
+            <button
+              className={index === activeIndex ? "is-active" : ""}
+              type="button"
+              key={poster.src}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`显示${poster.title}`}
+              aria-pressed={index === activeIndex}
+            >
+              <img src={poster.src} alt="" />
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -573,8 +725,24 @@ function App() {
       <main>
         <Hero />
         <About />
-        <FlowGallery id="works" projects={AIGC_PROJECTS} background="assets/ocean-mid.png" onOpen={setModal} />
-        <FlowGallery id="production" projects={PRODUCTION_PROJECTS} background="assets/ocean-deep.png" onOpen={setModal} />
+        <FlowGallery
+          id="works"
+          projects={AIGC_PROJECTS}
+          background="assets/ocean-mid.png"
+          kicker="SELECTED WORKS"
+          title="AIGC 影像创作"
+          description="原创叙事、生成式影像与完整成片"
+          onOpen={setModal}
+        />
+        <FlowGallery
+          id="production"
+          projects={PRODUCTION_PROJECTS}
+          background="assets/ocean-deep.png"
+          kicker="PRODUCTION"
+          title="商业影像与实拍"
+          description="品牌、空间与文化项目"
+          onOpen={setModal}
+        />
         <Posters onOpen={setModal} />
         <Awards onOpen={setModal} />
         <Contact />
