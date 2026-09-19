@@ -1373,6 +1373,18 @@ video {
   .name-card--back { grid-template-columns: minmax(0, 1fr) 112px; }
 }
 
+@media (min-width: 761px) and (max-width: 920px) {
+  .contact-heading {
+    display: block;
+  }
+
+  .contact-heading > p {
+    max-width: 560px;
+    margin: 12px 0 0;
+    text-align: left;
+  }
+}
+
 @media (max-width: 760px) {
   .has-jelly-cursor,
   .has-jelly-cursor * { cursor: auto !important; }
