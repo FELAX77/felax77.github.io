@@ -103,12 +103,69 @@ const PRODUCTION_PROJECTS = [
 ];
 
 const POSTERS = [
-  { title: "《别走太快》竖版海报", src: "assets/posters/biezou-vertical.png", tall: true },
-  { title: "《别走太快》横版海报", src: "assets/posters/biezou-wide.png" },
-  { title: "《超越生存》海报", src: "assets/posters/beyond-survival.jpg", tall: true },
-  { title: "《长治久安》黄米篇", src: "assets/posters/changzhi-millet.jpg" },
-  { title: "《长治久安》青砖篇", src: "assets/posters/changzhi-brick.jpg" },
-  { title: "《海宁皮影》海报", src: "assets/posters/haining-shadow.jpg", tall: true },
+  {
+    title: "《别走太快》竖版海报",
+    displayTitle: "别走太快",
+    summary: "儿童成长主题动画短片主视觉，以玻璃内外的距离组织画面关系。",
+    role: "海报设计",
+    tools: "Photoshop",
+    result: "中国好创意浙江赛区二等奖",
+    src: "assets/posters/biezou-vertical.png",
+    ratio: 941 / 1672,
+    tall: true,
+  },
+  {
+    title: "《别走太快》横版海报",
+    displayTitle: "别走太快",
+    summary: "延续竖版主视觉，为横屏展示重新组织人物、标题与留白比例。",
+    role: "海报设计",
+    tools: "Photoshop",
+    result: "中国好创意浙江赛区二等奖",
+    src: "assets/posters/biezou-wide.png",
+    ratio: 1672 / 941,
+  },
+  {
+    title: "《超越生存》海报",
+    displayTitle: "超越生存",
+    summary: "科幻短片视觉海报，以纵向故障和上下镜像强化压迫感与未知感。",
+    role: "海报设计",
+    tools: "Photoshop",
+    result: "个人项目",
+    src: "assets/posters/beyond-survival.jpg",
+    ratio: 896 / 1152,
+    tall: true,
+  },
+  {
+    title: "《长治久安》黄米篇",
+    displayTitle: "长治久安",
+    summary: "以黄米颗粒重构城市文字，将地域物产转化为可识别的城市视觉。",
+    role: "视觉设计",
+    tools: "Photoshop",
+    result: "城市文化系列创作",
+    src: "assets/posters/changzhi-millet.jpg",
+    ratio: 4961 / 3508,
+  },
+  {
+    title: "《长治久安》青砖篇",
+    displayTitle: "长治久安",
+    summary: "以青砖材质重组字体结构，延续系列视觉并突出古城建筑质感。",
+    role: "视觉设计",
+    tools: "Photoshop",
+    result: "城市文化系列创作",
+    src: "assets/posters/changzhi-brick.jpg",
+    ratio: 4961 / 3508,
+  },
+  {
+    title: "《海宁皮影》海报",
+    displayTitle: "海宁皮影",
+    summary: "文化遗产主题视觉海报，以皮影人物、传统纹样与舞台光影建立叙事中心。",
+    role: "海报设计",
+    tools: "Photoshop",
+    result: "中国好创意全国总决赛二等奖（团队项目）",
+    src: "assets/posters/haining-shadow.jpg",
+    ratio: 1104 / 1472,
+    tall: true,
+  },
 ];
 
 const VERIFIED_AWARDS = [
@@ -174,10 +231,12 @@ const CONTACT_INFO = {
   location: "浙江 · 嘉兴",
 };
 
-function OceanBackdrop({ src, tone = "mid" }) {
+function OceanBackdrop() {
   return (
-    <div className={`ocean-backdrop ocean-backdrop--${tone}`} aria-hidden="true">
-      <img src={src} alt="" />
+    <div className="ocean-backdrop" aria-hidden="true">
+      <img className="ocean-layer ocean-layer--mid" src="assets/ocean-mid.png" alt="" />
+      <img className="ocean-layer ocean-layer--shallow" src="assets/ocean-shallow.png" alt="" />
+      <img className="ocean-layer ocean-layer--deep" src="assets/ocean-deep.png" alt="" />
       <div className="ocean-shade" />
       <div className="surface-light">
         <i />
@@ -214,6 +273,8 @@ function OceanDepthController() {
       root.style.setProperty("--ocean-depth-overlay", (0.03 + depth * 0.5).toFixed(3));
       root.style.setProperty("--surface-depth-opacity", (1 - depth * 0.78).toFixed(3));
       root.style.setProperty("--particle-depth-opacity", (0.64 - depth * 0.38).toFixed(3));
+      root.style.setProperty("--ocean-shallow-opacity", Math.max(0, 1 - depth / 0.33).toFixed(3));
+      root.style.setProperty("--ocean-deep-opacity", Math.max(0, (depth - 0.38) / 0.62).toFixed(3));
     };
     const requestUpdate = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -315,6 +376,9 @@ function JellyfishCursor() {
       targetY = event.clientY;
       dotRef.current?.classList.add("is-visible");
       jellyRef.current?.classList.add("is-visible");
+      const overControl = Boolean(event.target.closest?.("button, a"));
+      jellyRef.current?.classList.toggle("is-on-control", overControl);
+      jellyRef.current?.style.setProperty("--jelly-control-scale", overControl ? "0.58" : "1");
       canvas.classList.add("is-visible");
       glowRef.current?.classList.add("is-visible");
       if (dotRef.current) {
@@ -397,7 +461,7 @@ function JellyfishCursor() {
       const swimSway = Math.sin(time * 0.0042) * Math.min(3.5, speed * 0.22);
       const stretch = Math.min(0.07, speed * 0.006);
       if (jellyRef.current) {
-        jellyRef.current.style.transform = `translate3d(${currentX - 40}px, ${currentY - 30 + bob}px, 0) rotate(${heading + swimSway}deg) scale(${1 - stretch * 0.35}, ${1 + stretch})`;
+        jellyRef.current.style.transform = `translate3d(${currentX - 40}px, ${currentY - 30 + bob}px, 0) rotate(${heading + swimSway}deg) scale(${1 - stretch * 0.35}, ${1 + stretch}) scale(var(--jelly-control-scale, 1))`;
       }
       if (glowRef.current) {
         glowRef.current.style.transform = `translate3d(${currentX - 150}px, ${currentY - 150}px, 0)`;
@@ -451,7 +515,6 @@ function Navigation() {
 function Hero() {
   return (
     <section className="hero screen-section" id="top">
-      <OceanBackdrop src="assets/ocean-shallow.png" tone="shallow" />
       <div className="hero-content">
         <p className="hero-cn">冯宇凡</p>
         <h1>FELAX</h1>
@@ -468,7 +531,6 @@ function Hero() {
 function About() {
   return (
     <section className="about screen-section" id="about">
-      <OceanBackdrop src="assets/ocean-mid.png" tone="mid" />
       <div className="section-shell about-layout">
         <div className="about-photo-wrap">
           <img className="about-photo" src="assets/portrait.jpg" alt="冯宇凡个人照片" />
@@ -526,7 +588,7 @@ function useFlow(sectionRef, count) {
   return value;
 }
 
-function FlowGallery({ id, projects, background, kicker, title, description, onOpen }) {
+function FlowGallery({ id, projects, kicker, title, description, onOpen }) {
   const sectionRef = useRef(null);
   const flow = useFlow(sectionRef, projects.length);
   const activeIndex = Math.max(0, Math.min(projects.length - 1, Math.round(flow)));
@@ -535,7 +597,6 @@ function FlowGallery({ id, projects, background, kicker, title, description, onO
   return (
     <section className="flow-section" id={id} ref={sectionRef} style={{ "--flow-count": projects.length }}>
       <div className="flow-sticky">
-        <OceanBackdrop src={background} tone="deep" />
         <header className="flow-heading">
           <span>{kicker}</span>
           <h2>{title}</h2>
@@ -589,7 +650,7 @@ function FlowGallery({ id, projects, background, kicker, title, description, onO
 }
 
 function Posters({ onOpen }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(POSTERS.length - 1);
   const activePoster = POSTERS[activeIndex];
   const changePoster = (step) => {
     setActiveIndex((current) => (current + step + POSTERS.length) % POSTERS.length);
@@ -597,44 +658,61 @@ function Posters({ onOpen }) {
 
   return (
     <section className="poster-section screen-section" id="posters">
-      <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
       <div className="poster-layout">
         <header className="poster-heading">
           <p>平面视觉</p>
-          <h2>海报作品</h2>
-          <span>均由 Photoshop 完成</span>
+          <h2>{activePoster.displayTitle}</h2>
+          <span>{activePoster.summary}</span>
+          <dl className="poster-details" aria-live="polite">
+            <div><dt>我的分工</dt><dd>{activePoster.role}</dd></div>
+            <div><dt>制作工具</dt><dd>{activePoster.tools}</dd></div>
+            <div><dt>项目成果</dt><dd>{activePoster.result}</dd></div>
+          </dl>
         </header>
-        <div className="poster-showcase">
-          <button
-            className={`poster-main ${activePoster.tall ? "is-tall" : ""}`}
-            type="button"
-            onClick={() => onOpen({ title: activePoster.title, image: activePoster.src })}
-            aria-label={`放大${activePoster.title}`}
-          >
-            <img src={activePoster.src} alt={activePoster.title} />
-          </button>
-          <div className="poster-meta" aria-live="polite">
-            <span>{String(activeIndex + 1).padStart(2, "0")} / {String(POSTERS.length).padStart(2, "0")}</span>
-            <h3>{activePoster.title}</h3>
-            <div className="poster-controls">
-              <button type="button" onClick={() => changePoster(-1)} aria-label="上一张海报"><ChevronLeft size={20} /></button>
-              <button type="button" onClick={() => changePoster(1)} aria-label="下一张海报"><ChevronRight size={20} /></button>
-            </div>
+        <div className="poster-stage" aria-label="海报作品展示">
+          {POSTERS.map((poster, index) => {
+            const rawOffset = (index - activeIndex + POSTERS.length) % POSTERS.length;
+            const offset = rawOffset > POSTERS.length / 2 ? rawOffset - POSTERS.length : rawOffset;
+            const positions = {
+              "-2": { x: 14, y: 72, scale: 0.52, rotate: 15, opacity: 0.32 },
+              "-1": { x: 19, y: 34, scale: 0.7, rotate: 11, opacity: 0.58 },
+              0: { x: 51, y: 50, scale: 1, rotate: 0, opacity: 1 },
+              1: { x: 83, y: 34, scale: 0.7, rotate: -11, opacity: 0.58 },
+              2: { x: 87, y: 74, scale: 0.52, rotate: -15, opacity: 0.32 },
+            };
+            const position = positions[offset];
+            return (
+              <button
+                className={`poster-float ${poster.tall ? "is-tall" : "is-wide"} ${offset === 0 ? "is-active" : ""} ${position ? "" : "is-hidden"}`}
+                type="button"
+                key={poster.src}
+                onClick={() => offset === 0
+                  ? onOpen({ title: poster.title, image: poster.src })
+                  : setActiveIndex(index)}
+                aria-label={offset === 0 ? `放大${poster.title}` : `显示${poster.title}`}
+                aria-pressed={offset === 0}
+                style={position ? {
+                  "--poster-x": `${position.x}%`,
+                  "--poster-y": `${position.y}%`,
+                  "--poster-scale": position.scale,
+                  "--poster-rotate": `${position.rotate}deg`,
+                  "--poster-opacity": position.opacity,
+                  "--poster-z": 10 - Math.abs(offset),
+                  "--poster-ratio": poster.ratio,
+                  "--poster-height-limit": `${(poster.tall ? 56 : 29) * poster.ratio}vh`,
+                  "--poster-active-height-limit": `${(poster.tall ? 74 : 55) * poster.ratio}vh`,
+                  "--poster-mobile-height-limit": `${(poster.tall ? 43 : 27) * poster.ratio}svh`,
+                  "--poster-mobile-active-height-limit": `${(poster.tall ? 55 : 34) * poster.ratio}svh`,
+                } : undefined}
+              >
+                <img src={poster.src} alt={poster.title} />
+              </button>
+            );
+          })}
+          <div className="poster-controls">
+            <button type="button" onClick={() => changePoster(-1)} aria-label="上一张海报"><ChevronLeft size={20} /></button>
+            <button type="button" onClick={() => changePoster(1)} aria-label="下一张海报"><ChevronRight size={20} /></button>
           </div>
-        </div>
-        <div className="poster-thumbs" aria-label="选择海报">
-          {POSTERS.map((poster, index) => (
-            <button
-              className={index === activeIndex ? "is-active" : ""}
-              type="button"
-              key={poster.src}
-              onClick={() => setActiveIndex(index)}
-              aria-label={`显示${poster.title}`}
-              aria-pressed={index === activeIndex}
-            >
-              <img src={poster.src} alt="" />
-            </button>
-          ))}
         </div>
       </div>
     </section>
@@ -644,7 +722,6 @@ function Posters({ onOpen }) {
 function Awards({ onOpen }) {
   return (
     <section className="awards screen-section" id="awards">
-      <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
       <div className="section-shell awards-layout">
         <div className="awards-primary">
           <div className="section-kicker">荣誉与成果</div>
@@ -692,7 +769,6 @@ function CopyLine({ icon: Icon, label, value, copyValue = value }) {
 function Contact() {
   return (
     <section className="contact screen-section" id="contact">
-      <OceanBackdrop src="assets/ocean-deep.png" tone="abyss" />
       <div className="section-shell contact-layout">
         <header className="contact-heading">
           <div>
@@ -715,16 +791,6 @@ function Contact() {
           </div>
         </aside>
         <div className="business-card-pair" id="card">
-          <article className="name-card name-card--front">
-            <span className="name-card-mark">FELAX</span>
-            <div className="name-card-identity">
-              <p>冯宇凡</p>
-              <h3>FELAX</h3>
-              <strong>AIGC 影像创作</strong>
-              <small>导演 · 拍摄 · 后期 · 视觉设计</small>
-            </div>
-            <span className="name-card-year">PORTFOLIO / 2026</span>
-          </article>
           <article className="name-card name-card--back">
             <div className="name-card-contact">
               <p>AIGC VIDEO CREATION</p>
@@ -798,6 +864,7 @@ function App() {
   const closeModal = useMemo(() => () => setModal(null), []);
   return (
     <>
+      <OceanBackdrop />
       <OceanDepthController />
       <Navigation />
       <JellyfishCursor />
@@ -807,7 +874,6 @@ function App() {
         <FlowGallery
           id="works"
           projects={AIGC_PROJECTS}
-          background="assets/ocean-mid.png"
           kicker="SELECTED WORKS"
           title="AIGC 影像创作"
           description="原创叙事、生成式影像与完整成片"
@@ -816,7 +882,6 @@ function App() {
         <FlowGallery
           id="production"
           projects={PRODUCTION_PROJECTS}
-          background="assets/ocean-deep.png"
           kicker="PRODUCTION"
           title="商业影像与实拍"
           description="品牌、空间与文化项目"
