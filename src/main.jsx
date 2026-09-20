@@ -108,7 +108,6 @@ const POSTERS = [
     displayTitle: "别走太快",
     summary: "儿童成长主题动画短片主视觉，以玻璃内外的距离组织画面关系。",
     role: "海报设计",
-    tools: "Photoshop",
     result: "中国好创意浙江赛区二等奖",
     src: "assets/posters/biezou-vertical.png",
     mobileSrc: "assets/mobile/posters/biezou-vertical.jpg",
@@ -120,7 +119,6 @@ const POSTERS = [
     displayTitle: "别走太快",
     summary: "延续竖版主视觉，为横屏展示重新组织人物、标题与留白比例。",
     role: "海报设计",
-    tools: "Photoshop",
     result: "中国好创意浙江赛区二等奖",
     src: "assets/posters/biezou-wide.png",
     mobileSrc: "assets/mobile/posters/biezou-wide.jpg",
@@ -131,7 +129,6 @@ const POSTERS = [
     displayTitle: "超越生存",
     summary: "科幻短片视觉海报，以纵向故障和上下镜像强化压迫感与未知感。",
     role: "海报设计",
-    tools: "Photoshop",
     result: "个人项目",
     src: "assets/posters/beyond-survival.jpg",
     mobileSrc: "assets/mobile/posters/beyond-survival.jpg",
@@ -143,7 +140,6 @@ const POSTERS = [
     displayTitle: "长治久安",
     summary: "以黄米颗粒重构城市文字，将地域物产转化为可识别的城市视觉。",
     role: "视觉设计",
-    tools: "Photoshop",
     result: "城市文化系列创作",
     src: "assets/posters/changzhi-millet.jpg",
     mobileSrc: "assets/mobile/posters/changzhi-millet.jpg",
@@ -154,7 +150,6 @@ const POSTERS = [
     displayTitle: "长治久安",
     summary: "以青砖材质重组字体结构，延续系列视觉并突出古城建筑质感。",
     role: "视觉设计",
-    tools: "Photoshop",
     result: "城市文化系列创作",
     src: "assets/posters/changzhi-brick.jpg",
     mobileSrc: "assets/mobile/posters/changzhi-brick.jpg",
@@ -165,7 +160,6 @@ const POSTERS = [
     displayTitle: "海宁皮影",
     summary: "文化遗产主题视觉海报，以皮影人物、传统纹样与舞台光影建立叙事中心。",
     role: "海报设计",
-    tools: "Photoshop",
     result: "中国好创意全国总决赛二等奖（团队项目）",
     src: "assets/posters/haining-shadow.jpg",
     mobileSrc: "assets/mobile/posters/haining-shadow.jpg",
@@ -663,10 +657,10 @@ function Posters({ onOpen }) {
         <header className="poster-heading">
           <p>平面视觉</p>
           <h2>{activePoster.displayTitle}</h2>
-          <span>{activePoster.summary}</span>
+          <span>{activePoster.summary} 本组海报均由 Photoshop 制作。</span>
           <dl className="poster-details" aria-live="polite">
             <div><dt>我的分工</dt><dd>{activePoster.role}</dd></div>
-            <div><dt>制作工具</dt><dd>{activePoster.tools}</dd></div>
+            <div><dt>制作方式</dt><dd>均由 Photoshop 制作</dd></div>
             <div><dt>项目成果</dt><dd>{activePoster.result}</dd></div>
           </dl>
         </header>
