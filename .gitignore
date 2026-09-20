@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .npm-cache/
+.tools/
 vite.stdout.log
 vite.stderr.log
 qa/

@@ -12,7 +12,6 @@
   --ocean-brightness: 1.08;
   --ocean-saturation: 1;
   --ocean-depth-overlay: 0.03;
-  --surface-depth-opacity: 1;
   --particle-depth-opacity: 0.64;
   --ocean-shallow-opacity: 1;
   --ocean-deep-opacity: 0;
@@ -168,30 +167,37 @@ video {
   position: absolute;
   inset: 0;
   z-index: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   filter: brightness(var(--ocean-brightness)) saturate(var(--ocean-saturation));
   animation: ocean-drift 18s ease-in-out infinite alternate;
   transform: scale(1.035);
   transition: opacity 180ms linear;
 }
 
-.ocean-layer--mid {
-  object-position: center center;
+.ocean-layer > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.ocean-layer--mid {
+  z-index: 0;
+}
+
+.ocean-layer--mid > img { object-position: center center; }
 
 .ocean-layer--shallow {
   z-index: 1;
-  object-position: center top;
   opacity: var(--ocean-shallow-opacity);
 }
 
+.ocean-layer--shallow > img { object-position: center top; }
+
 .ocean-layer--deep {
   z-index: 2;
-  object-position: center center;
   opacity: var(--ocean-deep-opacity);
 }
+
+.ocean-layer--deep > img { object-position: center center; }
 
 .ocean-shade {
   position: absolute;
@@ -199,48 +205,6 @@ video {
   z-index: 3;
   background: rgba(0, 8, 15, 0.12);
 }
-
-.surface-light {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0.62;
-  filter: opacity(var(--surface-depth-opacity));
-  mix-blend-mode: screen;
-}
-
-.surface-light::before {
-  position: absolute;
-  top: -5%;
-  left: -8%;
-  width: 116%;
-  height: 34%;
-  background:
-    radial-gradient(ellipse at center, transparent 45%, rgba(190, 247, 251, 0.28) 49%, transparent 53%) 0 0 / 170px 38px repeat,
-    radial-gradient(ellipse at center, transparent 45%, rgba(115, 225, 236, 0.2) 50%, transparent 54%) 70px 14px / 132px 31px repeat;
-  content: "";
-  filter: blur(2px);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
-  animation: surface-wave 8s linear infinite;
-}
-
-.surface-light i {
-  position: absolute;
-  top: -18%;
-  width: 23%;
-  height: 125%;
-  background: linear-gradient(to bottom, rgba(170, 241, 247, 0.23), rgba(90, 203, 222, 0.08) 42%, transparent 82%);
-  clip-path: polygon(47% 0, 55% 0, 100% 100%, 0 100%);
-  filter: blur(14px);
-  transform-origin: 50% 0;
-  animation: light-sway 10s ease-in-out infinite alternate;
-}
-
-.surface-light i:nth-child(1) { left: 8%; animation-duration: 11s; }
-.surface-light i:nth-child(2) { left: 39%; width: 31%; opacity: 0.72; animation-delay: -4s; animation-duration: 14s; }
-.surface-light i:nth-child(3) { left: 72%; width: 19%; opacity: 0.6; animation-delay: -7s; animation-duration: 12s; }
 
 .water-particles {
   position: absolute;
@@ -270,17 +234,6 @@ video {
   0% { transform: translateY(34px); opacity: 0; }
   25% { opacity: 0.65; }
   100% { transform: translateY(-80px); opacity: 0; }
-}
-
-@keyframes surface-wave {
-  0% { transform: translate3d(-3%, -2%, 0) scaleX(1); }
-  50% { transform: translate3d(2%, 1%, 0) scaleX(1.07); }
-  100% { transform: translate3d(5%, -2%, 0) scaleX(0.98); }
-}
-
-@keyframes light-sway {
-  from { transform: rotate(-4deg) translateX(-3%); opacity: 0.52; }
-  to { transform: rotate(5deg) translateX(4%); opacity: 0.94; }
 }
 
 .hero {
@@ -368,10 +321,17 @@ video {
   background: rgba(4, 18, 26, 0.74);
 }
 
-.about-photo {
-  width: 100%;
+.about-photo-picture {
+  display: block;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
+}
+
+.about-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: 50% 34%;
   filter: saturate(0.78) contrast(1.04);
@@ -579,8 +539,7 @@ video {
   box-shadow: 0 35px 95px rgba(0, 4, 9, 0.58), 0 0 28px rgba(87, 209, 215, 0.08);
 }
 
-.flow-card .cover-image,
-.flow-card .sprite-crop {
+.flow-card .cover-image {
   width: 100%;
   height: 100%;
   transition: transform 360ms ease;
@@ -590,26 +549,8 @@ video {
   object-fit: cover;
 }
 
-.flow-card:hover .cover-image,
-.flow-card:hover .sprite-crop {
+.flow-card:hover .cover-image {
   transform: scale(1.025);
-}
-
-.sprite-crop {
-  position: relative;
-  display: block;
-  overflow: hidden;
-}
-
-.sprite-crop img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 400%;
-  max-width: none;
-  height: 300%;
-  object-fit: fill;
-  transform-origin: top left;
 }
 
 .play-mark {
@@ -778,7 +719,14 @@ video {
   opacity: 0;
 }
 
+.poster-float picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .poster-float img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -1347,6 +1295,10 @@ video {
   object-fit: contain;
 }
 
+.modal-image-picture {
+  display: block;
+}
+
 .modal-image-title {
   margin: 14px 0 0;
   color: rgba(238, 248, 250, 0.68);
@@ -1389,6 +1341,9 @@ video {
   .has-jelly-cursor,
   .has-jelly-cursor * { cursor: auto !important; }
   .cursor-dot, .cursor-jelly, .cursor-water-fx, .cursor-waterlight { display: none; }
+  .ocean-backdrop::after { background: rgba(0, 6, 12, 0.46); }
+  .ocean-layer { animation-duration: 28s; transform: scale(1.025); }
+  .water-particles i { width: 2px; height: 2px; }
   .site-nav { height: 60px; padding: 0 18px; }
   .site-nav nav { gap: 17px; }
   .site-nav nav a { font-size: 11px; }
@@ -1396,47 +1351,85 @@ video {
   .hero-cn { font-size: 16px; }
   .hero-year { margin-top: 16px; }
   .dive-link { bottom: 26px; }
-  .about { padding: 84px 0 36px; }
-  .section-shell { width: min(100% - 30px, 600px); }
-  .about-layout { display: block; padding: 18px; }
-  .about-photo-wrap { min-height: 0; height: 250px; margin-bottom: 26px; }
+  .about { align-items: flex-start; padding: 84px 0 48px; }
+  .section-shell { width: min(100% - 40px, 600px); }
+  .about-layout {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .about-photo-wrap {
+    position: relative;
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    margin: 0 -20px 34px;
+    border-radius: 0;
+    background: #03131c;
+  }
   .about-photo { object-position: center 32%; }
+  .photo-caption {
+    position: absolute;
+    right: 18px;
+    bottom: 14px;
+    padding: 6px 8px;
+    color: rgba(240, 249, 251, 0.78);
+    background: rgba(1, 10, 16, 0.62);
+    backdrop-filter: blur(8px);
+  }
+  .about-copy { padding: 0 2px; }
   .about-copy h2, .awards-primary h2, .poster-heading h2 { font-size: 28px; }
   .about-lead { margin: 15px 0 22px; font-size: 13px; line-height: 1.75; }
   .skill-row { grid-template-columns: 1fr; gap: 7px; padding: 14px 0; }
   .skill-row p { font-size: 12px; }
   .flow-section { height: auto; min-height: 100svh; }
-  .flow-sticky { position: relative; height: auto; min-height: 100svh; padding: 92px 16px 54px; }
-  .flow-heading { position: relative; top: auto; left: auto; width: auto; margin-bottom: 28px; }
+  .flow-sticky { position: relative; height: auto; min-height: 100svh; padding: 94px 20px 64px; }
+  .flow-heading { position: relative; top: auto; left: auto; width: auto; margin-bottom: 34px; }
   .flow-heading h2 { font-size: 28px; }
   .flow-heading p { line-height: 1.6; }
   .flow-copy, .flow-line { display: none; }
-  .flow-cards { position: relative; display: grid; gap: 18px; }
+  .flow-cards { position: relative; display: grid; gap: 34px; }
   .flow-card {
     position: relative;
     top: auto;
     left: auto;
     width: 100%;
+    aspect-ratio: auto;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
     opacity: 1;
     filter: none;
     transform: none;
   }
-  .flow-card .cover-image, .flow-card .sprite-crop { height: calc(100% - 52px); }
+  .flow-card.is-active { border-color: transparent; box-shadow: none; }
+  .flow-card .cover-image {
+    display: block;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 2px;
+    box-shadow: 0 20px 52px rgba(0, 4, 9, 0.36);
+  }
+  .flow-card:hover .cover-image { transform: none; }
   .mobile-card-copy {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    position: static;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 52px;
-    padding: 0 15px;
-    background: rgba(2, 13, 20, 0.92);
+    height: auto;
+    padding: 12px 2px 0;
+    text-align: left;
+    background: transparent;
   }
   .mobile-card-copy strong { font-size: 14px; }
   .mobile-card-copy small { color: var(--muted); font-size: 10px; }
-  .play-mark { right: 12px; bottom: 64px; width: 36px; height: 36px; }
+  .play-mark { top: 12px; right: 12px; bottom: auto; width: 36px; height: 36px; }
   .poster-section { min-height: 0; }
   .poster-layout { display: block; width: auto; min-height: 0; padding: 92px 16px 52px; }
   .poster-heading { width: auto; }
@@ -1471,8 +1464,14 @@ video {
   .name-card-contact h3 { margin-bottom: 18px; font-size: 22px; }
   .name-card-contact dd { font-size: 11px; }
   .wechat-qr img { max-height: 148px; }
-  .modal-layer { padding: 10px; }
-  .modal-panel.is-project { display: block; width: 100%; max-height: 94svh; }
+  .modal-layer { align-items: end; padding: 0; }
+  .modal-panel {
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 -24px 80px rgba(0, 0, 0, 0.58);
+  }
+  .modal-panel.is-project { display: block; width: 100%; max-width: none; max-height: 96svh; }
+  .modal-media video { display: block; max-height: 56svh; }
   .modal-copy { padding: 28px 20px 24px; }
   .modal-copy h2 { font-size: 26px; }
   .modal-close { top: 8px; right: 8px; width: 38px; height: 38px; }

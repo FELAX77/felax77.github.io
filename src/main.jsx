@@ -24,7 +24,7 @@ const AIGC_PROJECTS = [
     description: "围绕儿童成长与陪伴展开的原创动画短片，从创意到成片完成完整生成与制作流程。",
     role: "导演 · 制作",
     result: "中国好创意浙江赛区二等奖",
-    cover: { type: "image", src: "assets/posters/biezou-wide.png" },
+    cover: { src: "assets/covers/biezou.jpg" },
     video: "media/biezou.mp4",
   },
   {
@@ -34,7 +34,7 @@ const AIGC_PROJECTS = [
     description: "以东方幻想为题材的AIGC短剧代表作，由三人团队共同完成，计划于B站与红果双平台上线。",
     role: "制作",
     result: "B站 · 红果待上线",
-    cover: { type: "sprite", src: "assets/stills/tianshi.jpg", col: 0, row: 2 },
+    cover: { src: "assets/covers/tianshi.jpg" },
     video: "media/tianshi.mp4",
   },
   {
@@ -44,7 +44,7 @@ const AIGC_PROJECTS = [
     description: "2025年完成的三体主题AI短片，在Seedance发布前探索长叙事中的世界观、镜头与视觉一致性。",
     role: "AIGC 制作",
     result: "个人创作",
-    cover: { type: "image", src: "assets/posters/beyond-survival.jpg" },
+    cover: { src: "assets/covers/beyond.jpg" },
     video: "media/beyond-survival.mp4",
   },
   {
@@ -54,7 +54,7 @@ const AIGC_PROJECTS = [
     description: "个人首部AI短片，以赛博朋克世界中的身份与逃亡为核心，独立完成从构思到输出的全部环节。",
     role: "单人全流程",
     result: "AI 处女作",
-    cover: { type: "sprite", src: "assets/stills/exile.jpg", col: 1, row: 1 },
+    cover: { src: "assets/covers/exile.jpg" },
     video: "media/exile-code.mp4",
   },
 ];
@@ -67,7 +67,7 @@ const PRODUCTION_PROJECTS = [
     description: "为宁巢公寓制作的品牌宣传视频，围绕空间、居住感受与品牌信息组织节奏。",
     role: "制作 · 剪辑",
     result: "商业项目",
-    cover: { type: "sprite", src: "assets/stills/ningchao.jpg", col: 1, row: 1 },
+    cover: { src: "assets/covers/ningchao.jpg" },
     video: "media/ningchao.mp4",
   },
   {
@@ -77,7 +77,7 @@ const PRODUCTION_PROJECTS = [
     description: "为安慕希品牌赛事创作的TVC参赛作品，以产品氛围和短时叙事为核心完成全流程制作。",
     role: "全流程制作",
     result: "品牌赛事参赛作品",
-    cover: { type: "sprite", src: "assets/stills/anmuxi.jpg", col: 2, row: 1 },
+    cover: { src: "assets/covers/anmuxi.jpg" },
     video: "media/anmuxi.mp4",
   },
   {
@@ -87,7 +87,7 @@ const PRODUCTION_PROJECTS = [
     description: "以人与未来技术的相遇为线索完成剧本与影像表达，并负责现场拍摄和后期制作。",
     role: "脚本 · 拍摄 · 后期",
     result: "浙江省大学生多媒体作品设计竞赛二等奖",
-    cover: { type: "sprite", src: "assets/stills/future.jpg", col: 2, row: 1 },
+    cover: { src: "assets/covers/future.jpg" },
     video: "media/future.mp4",
   },
   {
@@ -97,7 +97,7 @@ const PRODUCTION_PROJECTS = [
     description: "以海宁皮影为主题的多媒体作品，通过现场影像和海报视觉呈现传统技艺的造型与表演语言。",
     role: "拍摄 · 海报设计",
     result: "中国好创意全国总决赛二等奖",
-    cover: { type: "image", src: "assets/posters/haining-shadow.jpg" },
+    cover: { src: "assets/covers/haining.jpg" },
     video: "media/haining-shadow.mp4",
   },
 ];
@@ -111,6 +111,7 @@ const POSTERS = [
     tools: "Photoshop",
     result: "中国好创意浙江赛区二等奖",
     src: "assets/posters/biezou-vertical.png",
+    mobileSrc: "assets/mobile/posters/biezou-vertical.jpg",
     ratio: 941 / 1672,
     tall: true,
   },
@@ -122,6 +123,7 @@ const POSTERS = [
     tools: "Photoshop",
     result: "中国好创意浙江赛区二等奖",
     src: "assets/posters/biezou-wide.png",
+    mobileSrc: "assets/mobile/posters/biezou-wide.jpg",
     ratio: 1672 / 941,
   },
   {
@@ -132,6 +134,7 @@ const POSTERS = [
     tools: "Photoshop",
     result: "个人项目",
     src: "assets/posters/beyond-survival.jpg",
+    mobileSrc: "assets/mobile/posters/beyond-survival.jpg",
     ratio: 896 / 1152,
     tall: true,
   },
@@ -143,6 +146,7 @@ const POSTERS = [
     tools: "Photoshop",
     result: "城市文化系列创作",
     src: "assets/posters/changzhi-millet.jpg",
+    mobileSrc: "assets/mobile/posters/changzhi-millet.jpg",
     ratio: 4961 / 3508,
   },
   {
@@ -153,6 +157,7 @@ const POSTERS = [
     tools: "Photoshop",
     result: "城市文化系列创作",
     src: "assets/posters/changzhi-brick.jpg",
+    mobileSrc: "assets/mobile/posters/changzhi-brick.jpg",
     ratio: 4961 / 3508,
   },
   {
@@ -163,6 +168,7 @@ const POSTERS = [
     tools: "Photoshop",
     result: "中国好创意全国总决赛二等奖（团队项目）",
     src: "assets/posters/haining-shadow.jpg",
+    mobileSrc: "assets/mobile/posters/haining-shadow.jpg",
     ratio: 1104 / 1472,
     tall: true,
   },
@@ -174,24 +180,28 @@ const VERIFIED_AWARDS = [
     work: "《海宁皮影》· 文化遗产类",
     date: "2026",
     certificate: "assets/certificates/haining.jpg",
+    mobileCertificate: "assets/mobile/certificates/haining.jpg",
   },
   {
     title: "中国好创意浙江赛区二等奖",
     work: "《别走太快》· 动画短片类",
     date: "2026",
     certificate: "assets/certificates/biezou.png",
+    mobileCertificate: "assets/mobile/certificates/biezou.jpg",
   },
   {
     title: "浙江省大学生多媒体作品设计竞赛二等奖",
     work: "《碰到未来》",
     date: "2025",
     certificate: "assets/certificates/future.jpg",
+    mobileCertificate: "assets/mobile/certificates/future.jpg",
   },
   {
     title: "浙江省大学生多媒体作品设计竞赛二等奖",
     work: "《缺失的烟火》",
     date: "2025",
     certificate: "assets/certificates/fireworks.jpg",
+    mobileCertificate: "assets/mobile/certificates/fireworks.jpg",
   },
 ];
 
@@ -234,15 +244,19 @@ const CONTACT_INFO = {
 function OceanBackdrop() {
   return (
     <div className="ocean-backdrop" aria-hidden="true">
-      <img className="ocean-layer ocean-layer--mid" src="assets/ocean-mid.png" alt="" />
-      <img className="ocean-layer ocean-layer--shallow" src="assets/ocean-shallow.png" alt="" />
-      <img className="ocean-layer ocean-layer--deep" src="assets/ocean-deep.png" alt="" />
+      <picture className="ocean-layer ocean-layer--mid">
+        <source media="(max-width: 760px)" srcSet="assets/mobile/ocean-mid.jpg" />
+        <img src="assets/ocean-mid.png" alt="" />
+      </picture>
+      <picture className="ocean-layer ocean-layer--shallow">
+        <source media="(max-width: 760px)" srcSet="assets/mobile/ocean-shallow.jpg" />
+        <img src="assets/ocean-shallow.png" alt="" />
+      </picture>
+      <picture className="ocean-layer ocean-layer--deep">
+        <source media="(max-width: 760px)" srcSet="assets/mobile/ocean-deep.jpg" />
+        <img src="assets/ocean-deep.png" alt="" />
+      </picture>
       <div className="ocean-shade" />
-      <div className="surface-light">
-        <i />
-        <i />
-        <i />
-      </div>
       <div className="water-particles">
         {Array.from({ length: 14 }, (_, index) => (
           <i
@@ -271,7 +285,6 @@ function OceanDepthController() {
       root.style.setProperty("--ocean-brightness", (1.08 - depth * 0.54).toFixed(3));
       root.style.setProperty("--ocean-saturation", (1 - depth * 0.34).toFixed(3));
       root.style.setProperty("--ocean-depth-overlay", (0.03 + depth * 0.5).toFixed(3));
-      root.style.setProperty("--surface-depth-opacity", (1 - depth * 0.78).toFixed(3));
       root.style.setProperty("--particle-depth-opacity", (0.64 - depth * 0.38).toFixed(3));
       root.style.setProperty("--ocean-shallow-opacity", Math.max(0, 1 - depth / 0.33).toFixed(3));
       root.style.setProperty("--ocean-deep-opacity", Math.max(0, (depth - 0.38) / 0.62).toFixed(3));
@@ -293,23 +306,8 @@ function OceanDepthController() {
   return null;
 }
 
-function SpriteCrop({ src, col = 0, row = 0, alt = "" }) {
-  return (
-    <span className="sprite-crop" role="img" aria-label={alt}>
-      <img
-        src={src}
-        alt=""
-        style={{ transform: `translate(${-col * 25}%, ${-row * (100 / 3)}%)` }}
-      />
-    </span>
-  );
-}
-
 function Cover({ cover, title }) {
-  if (cover.type === "sprite") {
-    return <SpriteCrop src={cover.src} col={cover.col} row={cover.row} alt={`${title}画面`} />;
-  }
-  return <img className="cover-image" src={cover.src} alt={`${title}封面`} />;
+  return <img className="cover-image" src={cover.src} alt={`${title}封面`} loading="lazy" decoding="async" />;
 }
 
 function JellyfishCursor() {
@@ -533,7 +531,10 @@ function About() {
     <section className="about screen-section" id="about">
       <div className="section-shell about-layout">
         <div className="about-photo-wrap">
-          <img className="about-photo" src="assets/portrait.jpg" alt="冯宇凡个人照片" />
+          <picture className="about-photo-picture">
+            <source media="(max-width: 760px)" srcSet="assets/mobile/portrait.jpg" />
+            <img className="about-photo" src="assets/portrait.jpg" alt="冯宇凡个人照片" decoding="async" />
+          </picture>
           <span className="photo-caption">FENG YUFAN / FELAX</span>
         </div>
         <div className="about-copy">
@@ -687,7 +688,7 @@ function Posters({ onOpen }) {
                 type="button"
                 key={poster.src}
                 onClick={() => offset === 0
-                  ? onOpen({ title: poster.title, image: poster.src })
+                  ? onOpen({ title: poster.title, image: poster.src, mobileImage: poster.mobileSrc })
                   : setActiveIndex(index)}
                 aria-label={offset === 0 ? `放大${poster.title}` : `显示${poster.title}`}
                 aria-pressed={offset === 0}
@@ -705,7 +706,10 @@ function Posters({ onOpen }) {
                   "--poster-mobile-active-height-limit": `${(poster.tall ? 55 : 34) * poster.ratio}svh`,
                 } : undefined}
               >
-                <img src={poster.src} alt={poster.title} />
+                <picture>
+                  <source media="(max-width: 760px)" srcSet={poster.mobileSrc} />
+                  <img src={poster.src} alt={poster.title} loading="lazy" decoding="async" />
+                </picture>
               </button>
             );
           })}
@@ -732,7 +736,7 @@ function Awards({ onOpen }) {
                 className="award-row"
                 type="button"
                 key={`${item.title}-${item.work}`}
-                onClick={() => onOpen({ title: item.title, image: item.certificate })}
+                onClick={() => onOpen({ title: item.title, image: item.certificate, mobileImage: item.mobileCertificate })}
               >
                 <Award size={21} strokeWidth={1.5} aria-hidden="true" />
                 <span><strong>{item.title}</strong><small>{item.work}</small></span>
@@ -845,14 +849,24 @@ function Modal({ content, onClose }) {
         <button ref={closeRef} className="modal-close" type="button" onClick={onClose} aria-label="关闭"><X size={22} /></button>
         {isProject ? (
           <>
-            <div className="modal-media"><video src={content.video} controls preload="metadata" playsInline /></div>
+            <div className="modal-media">
+              <video controls preload="none" playsInline poster={content.cover.src}>
+                <source src={content.video} type="video/mp4" />
+              </video>
+            </div>
             <div className="modal-copy">
               <p>{content.eyebrow}</p><h2>{content.title}</h2><span>{content.description}</span>
               <dl><div><dt>分工</dt><dd>{content.role}</dd></div><div><dt>成果</dt><dd>{content.result}</dd></div></dl>
             </div>
           </>
         ) : (
-          <><img className="modal-image" src={content.image} alt={content.title} /><p className="modal-image-title">{content.title}</p></>
+          <>
+            <picture className="modal-image-picture">
+              {content.mobileImage ? <source media="(max-width: 760px)" srcSet={content.mobileImage} /> : null}
+              <img className="modal-image" src={content.image} alt={content.title} />
+            </picture>
+            <p className="modal-image-title">{content.title}</p>
+          </>
         )}
       </section>
     </div>
